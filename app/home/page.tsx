@@ -40,12 +40,7 @@ export default function Home() {
     <div>
       <h1>Home</h1>
       <p>{x}</p>
-      {
-        !session &&
-        <div className='w-full h-screen flex items-center justify-center'>
-          <button className="text-white px-8 py-2 rounded-full bg-green-500 font-bold text-lg" onClick={() => signIn('spotify', { callbackUrl: "/home" })}>Login with spotify</button>
-        </div>
-      }
+      {session && <button onClick={() => signOut({ callbackUrl: "/" })}>Sign out</button>} {/* Sign out button if logged in */}
       <div>
         {playlist.map((item) => 
           <div key={item.id}>

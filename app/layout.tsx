@@ -1,29 +1,28 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
-// import "./globals.css";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+// import './globals.css'
+import { getServerSession } from 'next-auth'
+import { NextAuthProvider } from './provider/NextAuthProvider'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
-// export default function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   return (
-//     <html lang="en">
-//       <body className={inter.className}>{children}</body>
-//     </html>
-//   );
-// }
+export const metadata = {
+  title: "Login with Spotify",
+  description: "Login page to authenticate through Spotify",
+};
 
-export default function App ({
-  Component,
-  pageProps: {session, ...pageProps},
+export default function LoginPageLayout({
+  children,
+}: {
+  children: React.ReactNode;
 }) {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
-  )
+    <html lang="en">
+      <NextAuthProvider>
+        <body>
+          <main>{children}</main>
+        </body>
+      </NextAuthProvider>
+    </html>
+  );
 }
