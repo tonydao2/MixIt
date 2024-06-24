@@ -10,14 +10,15 @@ type PlaylistItem = {
 
 export default function Home() {
   const { data: session } = useSession();
-  const [x, setX] = useState("");
+  // const [x, setX] = useState(""); // Test authorization token
   const [playlist, setPlaylist] = useState<PlaylistItem[]>([]);
 
-  useEffect(() => {
+  useEffect(() => { // Fetch all user's playlist data when logged in
     async function fetchPlaylist() {
-      if (session && session.accessToken) {
-        setX(session.accessToken);
-      }
+      // Test authorization token
+      // if (session && session.accessToken) {
+      //   setX(session.accessToken);
+      // }
       const resposne = await fetch("https://api.spotify.com/v1/me/playlists", {
         headers: {
           Authorization: `Bearer ${session?.accessToken}`,
@@ -37,17 +38,20 @@ export default function Home() {
   }, [session]);
 
   return (
-    <div>
-      <h1>Home</h1>
-      <p>{x}</p>
-      {session && <button onClick={() => signOut({ callbackUrl: "/" })}>Sign out</button>} {/* Sign out button if logged in */}
+    <main className="flex flex-col items-center justify-center bg-black text-white">
       <div>
-        {playlist.map((item) => 
-          <div key={item.id}>
-            <p>{item.name}</p>
-          </div>
-        )}
+        <h1>Home</h1>
+        {session && 
+          <button onClick={() => signOut({ callbackUrl: "/" })}>Sign out</button>
+        } {/* Sign out button if logged in */}
+        <div>
+          {playlist.map((item) => 
+            <div key={item.id}>
+              <p>{item.name}</p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
