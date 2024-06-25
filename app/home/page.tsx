@@ -6,6 +6,9 @@ import { useSession, signIn, signOut } from "next-auth/react";
 type PlaylistItem = {
   id: string;
   name: string;
+  images: {
+    imageUrl: string;
+  }
 };
 
 export default function Home() {
@@ -15,26 +18,27 @@ export default function Home() {
 
   useEffect(() => { // Fetch all user's playlist data when logged in
     async function fetchPlaylist() {
-      // Test authorization token
-      // if (session && session.accessToken) {
-      //   setX(session.accessToken);
-      // }
-      const resposne = await fetch("https://api.spotify.com/v1/me/playlists", {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      });
-      const data = await resposne.json();
-      if (data.items) {
-        setPlaylist(data.items);
-      } else {
-        console.error("Playlist items not found in the response", data);
+      if (session?.accessToken) {
+        try {
+          const response = await fetch("/api/getPlaylist", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.accessToken}`,
+            },
+          });
+          const data = await response.json();
+          setPlaylist(data);
+        } catch (error) {
+          console.error("Error fetching playlist data", error);
+        }
       }
     }
-    
+
     if (session) {
       fetchPlaylist();
     }
+
   }, [session]);
 
   return (
