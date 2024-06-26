@@ -11,37 +11,12 @@ type PlaylistItem = {
 
 export default function Home() {
   const { data: session } = useSession();
-  const [x, setX] = useState("");
-  const [playlist, setPlaylist] = useState<PlaylistItem[]>([]);
-
-  useEffect(() => {
-    async function fetchPlaylist() {
-      if (session && session.accessToken) {
-        setX(session.accessToken);
-      }
-      const resposne = await fetch("https://api.spotify.com/v1/me/playlists", {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      });
-      const data = await resposne.json();
-      if (data.items) {
-        setPlaylist(data.items);
-      } else {
-        console.error("Playlist items not found in the response", data);
-      }
-    }
-    
-    if (session) {
-      fetchPlaylist();
-    }
-  }, [session]);
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen bg-black text-white">
+    <div className="flex flex-col items-center justify-center h-screen bg-black text-white">
       <header className="flex items-center justify-center w-full p-4 relative top-0">
         <Image
-          src="/spotifylogo.svg" // Make sure the image path is correct
+          src="/spotifylogo.svg"
           alt="Spotify Logo"
           width={80}
           height={80}
@@ -59,6 +34,6 @@ export default function Home() {
           </>
         )}
       </div> 
-    </main>
+    </div>
   )
 }
