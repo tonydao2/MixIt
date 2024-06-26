@@ -2,56 +2,60 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import SelectPlaylist from "../components/SelectPlaylist";
 
-type PlaylistItem = {
+interface PlaylistItem {
   id: string;
   name: string;
+  images: {
+    url: string;
+  }[];
 };
 
 export default function Home() {
   const { data: session } = useSession();
   // const [x, setX] = useState(""); // Test authorization token
-  const [playlist, setPlaylist] = useState<PlaylistItem[]>([]);
+  const [playlists, setPlaylists] = useState<PlaylistItem[]>([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistItem | null>(null);
 
-  useEffect(() => { // Fetch all user's playlist data when logged in
+  useEffect(() => {
     async function fetchPlaylist() {
-      // Test authorization token
-      // if (session && session.accessToken) {
-      //   setX(session.accessToken);
-      // }
-      const resposne = await fetch("https://api.spotify.com/v1/me/playlists", {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
-      });
-      const data = await resposne.json();
-      if (data.items) {
-        setPlaylist(data.items);
-      } else {
-        console.error("Playlist items not found in the response", data);
+      if (session?.accessToken) {
+        try {
+          const response = await fetch("/api/getPlaylist", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.accessToken}`,
+            },
+          });
+          const data = await response.json();
+          setPlaylists(data);
+        } catch (error) {
+          console.error("Error fetching playlist data", error);
+        }
       }
     }
-    
+
     if (session) {
       fetchPlaylist();
     }
+
   }, [session]);
 
+  if (selectedPlaylist) {
+    console.log(selectedPlaylist);
+  }
+
   return (
-    <main className="flex flex-col items-center justify-center bg-black text-white">
-      <div>
+    <div className="flex flex-col items-center justify-center text-white space-y-3">
+      <nav>
         <h1>Home</h1>
         {session && 
           <button onClick={() => signOut({ callbackUrl: "/" })}>Sign out</button>
-        } {/* Sign out button if logged in */}
-        <div>
-          {playlist.map((item) => 
-            <div key={item.id}>
-              <p>{item.name}</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
+        }
+      </nav>
+      <SelectPlaylist playlists={playlists} />
+    </div>
   );
 }
