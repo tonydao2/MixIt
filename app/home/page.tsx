@@ -17,6 +17,7 @@ export default function Home() {
   // const [x, setX] = useState(""); // Test authorization token
   const [playlists, setPlaylists] = useState<PlaylistItem[]>([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistItem | null>(null);
+  // # TODO - use selectedPlaylist to get tracks on the playlist
 
   useEffect(() => {
     async function fetchPlaylist() {
@@ -30,7 +31,11 @@ export default function Home() {
             },
           });
           const data = await response.json();
-          setPlaylists(data);
+          if (Array.isArray(data)) {
+            setPlaylists(data);
+          } else {
+            console.error("Expected an array but got:", data);
+          }
         } catch (error) {
           console.error("Error fetching playlist data", error);
         }
@@ -43,9 +48,11 @@ export default function Home() {
 
   }, [session]);
 
-  if (selectedPlaylist) {
-    console.log(selectedPlaylist);
-  }
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedId = event.target.value;
+        const playlist = playlists.find(p => p.id === selectedId) || null;
+        setSelectedPlaylist(playlist);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center text-white space-y-3">
@@ -55,7 +62,17 @@ export default function Home() {
           <button onClick={() => signOut({ callbackUrl: "/" })}>Sign out</button>
         }
       </nav>
-      <SelectPlaylist playlists={playlists} />
+      {/* uses an event change to select a playlist */}
+      <select onChange={handleSelectChange} className="mb-4 p-2 bg-gray-800 text-white">
+            <option value="">Select a Playlist</option>
+            {playlists.map((playlist) => (
+                <option key={playlist.id} value={playlist.id}>
+                {playlist.name}
+                </option>
+            ))}
+      </select>
+      <SelectPlaylist playlist={selectedPlaylist} accessToken={session?.accessToken} />
+      
     </div>
   );
 }
