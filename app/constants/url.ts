@@ -1,0 +1,1 @@
+export const API_URL: string = "https://api.spotify.com/v1";
