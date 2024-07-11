@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 type PlaylistItem = {
   id: string;
@@ -28,12 +28,15 @@ export default function Home() {
           <>
             <h2 className="text-5xl font-bold mb-2">Welcome to MixIt!</h2>
             <p className="text-xl mb-4">Sign in to get started</p>
-            <button onClick={() => signIn(('spotify'), {callbackUrl: '/home'})} className="px-6 py-3 bg-white text-black font-bold text-lg rounded-full hover:bg-green-500 hover:text-white transition-colors duration-200">
+            <button
+              onClick={() => signIn('spotify', { callbackUrl: '/home' })}
+              className="px-6 py-3 bg-white text-black font-bold text-lg rounded-full hover:bg-green-500 hover:text-white transition-colors duration-200"
+            >
               Sign In
             </button>
           </>
         )}
-      </div> 
+      </div>
     </div>
-  )
+  );
 }

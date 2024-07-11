@@ -1,0 +1,102 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.singleAttributePerLine": false,
+  "prettier.trailingComma": "all",
+  "prettier.arrowParens": "always",
+  "prettier.jsxSingleQuote": true,
+  "prettier.printWidth": 80,
+  "editor.formatOnType": false, // required
+  "editor.formatOnPaste": true, // optional
+  "editor.formatOnSave": true, // optional
+  "editor.formatOnSaveMode": "file", // required to format on save
+  "files.autoSave": "onFocusChange", // optional but recommended
+
+  // Editor
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.minimap.autohide": true,
+  "editor.foldingHighlight": false,
+  "editor.smoothScrolling": true,
+  "editor.fontLigatures": true,
+  "editor.guides.indentation": false,
+  "editor.inlayHints.enabled": "off",
+  "editor.renderLineHighlight": "none",
+  "editor.cursorStyle": "block-outline",
+  "editor.scrollbar.vertical": "hidden",
+  "explorer.sortOrder": "type",
+  "editor.bracketPairColorization.enabled": false,
+  // "editor.folding": false, // removes code folding arrows
+  "editor.lineNumbers": "off", // removes line numbers
+
+  "catppuccin.italicKeywords": false,
+  "catppuccin.italicComments": false,
+  "workbench.startupEditor": "none",
+  "workbench.layoutControl.enabled": false,
+  "files.associations": {
+    "*.json": "json"
+  },
+  "liveServer.settings.donotShowInfoMsg": true,
+  "update.mode": "manual",
+  "workbench.tips.enabled": false,
+  "workbench.activityBar.location": "hidden",
+  "workbench.colorTheme": "Catppuccin Macchiato",
+
+  "editor.roundedSelection": false,
+  "workbench.iconTheme": "symbols",
+  "editor.lineHeight": 1.6,
+  "editor.scrollbar.horizontalScrollbarSize": 6,
+  "editor.scrollbar.verticalScrollbarSize": 10,
+  "symbols.hidesExplorerArrows": true, // symbols file icons required
+  "window.titleBarStyle": "native",
+
+  // File Explorer
+  "files.defaultLanguage": "${activeEditorLanguage}",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+
+  // settings for APC customize UI++ extension
+  "apc.electron": {
+    "titleBarStyle": "hidden",
+    "titleBarOverlay": {
+      "color": "#1e2030",
+      "symbolColor": "#eeffffc0",
+      "height": 32
+    },
+    "backgroundColor": "#00000000"
+  },
+  "apc.menubar.compact": true,
+  "apc.statusBar": {
+    "height": 28,
+    "position": "editor-bottom"
+  },
+  "apc.sidebar.titlebar": {
+    "height": 36
+  },
+  "apc.listRow": {
+    "height": 30
+  },
+  "apc.stylesheet": {
+    // ".editor-actions": "margin: auto 140px auto 0;background: #ffffff0f; height: 26px !important; border-radius: 4px; padding: 0 0 0 4px !important",
+    "div.tab[aria-selected='true'] > .tab-border-top-container": "display: block !important; height: 2.5px; width: 100%; position: absolute; left: 0; background: linear-gradient(to right, #06f, #0af); box-shadow: 0 2px 10px #08f; z-index: 10",
+    ".tabs-border-bottom::after": "background: transparent !important",
+    ".monaco-workbench .part.statusbar>.items-container>.statusbar-item.remote-kind": "background: transparent; color: #a7b0f3",
+    ".inline-title-bar:not(.horizontal-activitybar) .monaco-workbench:not(.fullscreen) .activitybar:not(.right) .content": "height: 100% !important; transform: none !important",
+    ".inline-title-bar:not(.horizontal-activitybar) .monaco-workbench div.activitybar.bordered.left .content": "border-right: 1px solid #0003 !important",
+    ".monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator:before": "border: none !important; width: 2.5px; background: linear-gradient(to top, #06f, #0af); box-shadow: 5px 0 15px #08f",
+    ".custom-activitybar:not(.horizontal-activitybar) div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item": "margin-top: 0 !important"
+  },
+  // "workbench.colorCustomizations": {
+  //   "editorCursor.background": "#000000",
+  //   "editorCursor.foreground": "#ff896f",
+  //   "sideBar.background": "#232639"
+  // },
+  "window.menuBarVisibility": "compact",
+  "editor.minimap.renderCharacters": false,
+  "window.zoomLevel": -0.1,
+  "workbench.tree.indent": 15,
+  "editor.minimap.enabled": false,
+  "workbench.tree.renderIndentGuides": "always"
+  // "workbench.editor.tabSizing": "fixed",
+  // "workbench.editor.tabSizingFixedMaxWidth": 200
+}
