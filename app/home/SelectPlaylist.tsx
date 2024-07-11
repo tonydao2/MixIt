@@ -1,61 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { fetchTracks } from '../utils/fetchTracks';
+import { PlaylistItem, SelectPlaylistProps } from '../types/playlist';
 
-interface PlaylistItem {
-  id: string;
-  name: string;
-  images: {
-    url: string;
-  }[];
-}
+export default function SelectPlaylist({
+  playlist,
+  accessToken,
+}: SelectPlaylistProps) {
+  const [tracks, setTracks] = useState<any[]>([]);
 
-interface Track {
-    id: string;
-    name: string;
-    artist: string;
-}
+  const myLoader = () => {
+    return '${src}?w=${width}&q=${quality || 75}';
+  };
 
-interface SelectPlaylistProps {
-  playlist: PlaylistItem | null;
-  accessToken: string | undefined;
-}
+  useEffect(() => {
+    async function getTracks() {
+      try {
+        const data = await fetchTracks(playlist, accessToken);
 
-export default function SelectPlaylist({ playlist, accessToken }: SelectPlaylistProps) {
-    const [tracks, setTracks] = useState<any[]>([]);
-
-    const myLoader = ({ src, width, quality }: { src: string; width: number; quality?: number }) => {
-        return `${src}?w=${width}&q=${quality || 75}`;
-    };
-
-
-    useEffect(() => {
-        async function fetchTracks() {
-            if (playlist) {
-            try {
-                const response = await fetch('/api/getTracks', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    Playlist: playlist.id,
-                },
-                });
-                const data = await response.json();
-                setTracks(data);
-            } catch (error) {
-                console.error("Error fetching tracks", error);
-            }
-            }
-        }
-        fetchTracks();
-    }, [playlist, accessToken]);
+        setTracks(data);
+      } catch (error) {
+        console.error('Error fetching tracks', error);
+      }
+    }
+    getTracks();
+  }, [playlist, accessToken]);
 
   if (!playlist) {
     return <div>No playlist selected</div>;
   }
 
   console.log(tracks);
-
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -71,13 +46,11 @@ export default function SelectPlaylist({ playlist, accessToken }: SelectPlaylist
       )}
       {tracks.length > 0 && (
         <div>
-            {tracks.map((item) => (
-            <p key={item.track.id}>
-                {item.track.name}
-            </p>
-            ))}
+          {tracks.map((item) => (
+            <p key={item.track.id}>{item.track.name}</p>
+          ))}
         </div>
-        )}
+      )}
     </div>
   );
 }
