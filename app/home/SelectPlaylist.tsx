@@ -33,7 +33,7 @@ export default function SelectPlaylist({
   console.log(tracks);
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className='flex flex-col justify-center items-center'>
       <h2>{playlist.name}</h2>
       {playlist.images.length > 0 && (
         <Image

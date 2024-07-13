@@ -66,12 +66,12 @@ export default function Home() {
   };
 
   if (status === 'loading') {
-    return <div className="flex justify-center">Loading...</div>;
+    return <div className='flex justify-center'>Loading...</div>;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center text-white space-y-3">
-      <nav className="flex flex-col items-center justify-center space-y-2">
+    <div className='flex flex-col items-center justify-center text-white space-y-3'>
+      <nav className='flex flex-col items-center justify-center space-y-2'>
         <h1>Home</h1>
         {session && (
           <button onClick={() => signOut({ callbackUrl: '/' })}>
@@ -82,9 +82,9 @@ export default function Home() {
       {/* uses an event change to select a playlist */}
       <select
         onChange={handleSelectChange}
-        className="mb-4 p-2 bg-gray-800 text-white"
+        className='mb-4 p-2 bg-gray-800 text-white'
       >
-        <option value="">Select a Playlist</option>
+        <option value=''>Select a Playlist</option>
         {playlists.map((playlist) => (
           <option key={playlist.id} value={playlist.id}>
             {playlist.name}
