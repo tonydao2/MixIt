@@ -17,12 +17,12 @@ export default function LoginPageLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <NextAuthProvider>
-        <body>
+    <html lang="en" className={inter.className}>
+      <body>
+        <NextAuthProvider>
           <main>{children}</main>
-        </body>
-      </NextAuthProvider>
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }
