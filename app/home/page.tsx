@@ -22,7 +22,8 @@ export default function Home() {
   const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistItem | null>(
     null,
   );
-  // # TODO - use selectedPlaylist to get tracks on the playlist
+  const [tracks, setTracks] = useState<any[]>([]);
+  //  TODO - use selectedPlaylist to get tracks on the playlist
 
   useEffect(() => {
     if (status === 'loading') return; // Do nothing while loading
@@ -59,10 +60,29 @@ export default function Home() {
     }
   }, [session]);
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const selectedId = event.target.value;
     const playlist = playlists.find((p) => p.id === selectedId) || null;
     setSelectedPlaylist(playlist);
+
+    if (playlist && session?.accessToken) {
+      try {
+        const response = await fetch('/api/getTracks', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.accessToken}`,
+            Playlist: playlist.id,
+          },
+        });
+        const data = await response.json();
+        setTracks(data);
+      } catch (error) {
+        console.error('Error fetching tracks', error);
+      }
+    }
   };
 
   if (status === 'loading') {
@@ -94,7 +114,9 @@ export default function Home() {
       <SelectPlaylist
         playlist={selectedPlaylist}
         accessToken={session?.accessToken}
+        tracks={tracks}
       />
+      <TracksRemix tracks={tracks} accessToken={session?.accessToken} />
     </div>
   );
 }
