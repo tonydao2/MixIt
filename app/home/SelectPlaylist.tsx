@@ -6,31 +6,34 @@ import { PlaylistItem, SelectPlaylistProps } from '../types/playlist';
 export default function SelectPlaylist({
   playlist,
   accessToken,
+  tracks,
 }: SelectPlaylistProps) {
-  const [tracks, setTracks] = useState<any[]>([]);
+  // const [tracks, setTracks] = useState<any[]>([]);
 
-  const myLoader = () => {
-    return '${src}?w=${width}&q=${quality || 75}';
+  const myLoader = ({ src, width, quality }: any) => {
+    return `${src}?w=${width}&q=${quality || 75}`;
   };
 
-  useEffect(() => {
-    async function getTracks() {
-      try {
-        const data = await fetchTracks(playlist, accessToken);
+  // useEffect(() => {
+  //   async function getTracks() {
+  //     try {
+  //       const data = await fetchTracks(playlist, accessToken);
 
-        setTracks(data);
-      } catch (error) {
-        console.error('Error fetching tracks', error);
-      }
-    }
-    getTracks();
-  }, [playlist, accessToken]);
+  //       setTracks(data);
+  //     } catch (error) {
+  //       console.error('Error fetching tracks', error);
+  //     }
+  //   }
+  //   getTracks();
+  // }, [playlist, accessToken]);
+
+  // if (!playlist) {
+  //   return <div>No playlist selected</div>;
+  // }
 
   if (!playlist) {
     return <div>No playlist selected</div>;
   }
-
-  console.log(tracks);
 
   return (
     <div className='flex flex-col justify-center items-center'>
@@ -44,13 +47,13 @@ export default function SelectPlaylist({
           height={200}
         />
       )}
-      {tracks.length > 0 && (
+      {/* {tracks.length > 0 && (
         <div>
           {tracks.map((item) => (
             <p key={item.track.id}>{item.track.name}</p>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }
