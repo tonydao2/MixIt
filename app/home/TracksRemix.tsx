@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Track {
   track: {
@@ -10,15 +10,69 @@ interface Track {
   };
 }
 
+interface Remix {
+  id: string;
+  name: string;
+  artists: {
+    name: string;
+  }[];
+}
+
+// This is the interface for the remixes of a track and the track itself
+interface TrackRemix {
+  track: Track['track'];
+  remixes: Remix[];
+}
+
 interface TracksRemixProps {
   tracks: Track[];
   accessToken: string | undefined;
 }
 
 export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
-  console.log(tracks[0]?.track.artists[0].name);
+  const [remixes, setRemixes] = useState<TrackRemix[]>([]);
+  console.log(tracks);
 
-  // TODO Add a remix useEffect to fetch remixes for each track and display them with old on left side and new on right side
+  useEffect(() => {
+    async function getRemixes() {
+      try {
+        const response = await fetch('/api/getRemixes', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ tracks, accessToken }),
+        });
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching remixes', error);
+      }
+    }
+
+    // if (accessToken && tracks.length > 0) {
+    //   getRemixes();
+    // }
+  }, [tracks, accessToken]);
+
+  async function handleClick() {
+    console.log('clicked');
+    try {
+      const response = await fetch(`/api/getRemixes`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      setRemixes(data);
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching remixes', error);
+    }
+  }
 
   return (
     <div>
@@ -29,6 +83,8 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
           ))}
         </div>
       )}
+
+      <button onClick={handleClick}>Test </button>
     </div>
   );
 }
