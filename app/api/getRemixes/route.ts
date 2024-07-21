@@ -12,16 +12,22 @@ export async function GET(req: Request) {
   const accessToken = authorization.split(' ')[1];
 
   try {
-    const response = await fetch(`${API_URL}/me/playlists`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await fetch(
+      `${API_URL}/search?q=remix&type=track&limit=5`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     const data = await response.json();
+    console.log(data);
 
     if (response.ok) {
-      return new Response(JSON.stringify(data.items), { status: 200 });
+      return new Response(JSON.stringify(data.tracks.items), { status: 200 });
     } else {
       return new Response(JSON.stringify({ error: data }), {
         status: response.status,
