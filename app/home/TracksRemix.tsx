@@ -10,6 +10,7 @@ interface Track {
   };
 }
 
+// This is the interface for the remixes of a track
 interface Remix {
   id: string;
   name: string;
@@ -31,7 +32,6 @@ interface TracksRemixProps {
 
 export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
   const [remixes, setRemixes] = useState<TrackRemix[]>([]);
-  console.log(tracks);
 
   useEffect(() => {
     async function getRemixes() {
@@ -59,20 +59,23 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
   async function handleClick() {
     console.log('clicked');
     try {
-      const response = await fetch(`/api/getRemixes`, {
-        method: 'GET',
+      const response = await fetch('/api/getRemixes', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
+        // pass the tracks as the body of the request
+        body: JSON.stringify({ tracks }),
       });
       const data = await response.json();
       setRemixes(data);
-      console.log(data);
+      console.log('remix', data);
     } catch (error) {
       console.error('Error fetching remixes', error);
     }
   }
+  // TODO: Include the picture of the playlist of the song in response
 
   return (
     <div>
