@@ -30,13 +30,6 @@ export default function SelectPlaylist({
           height={200}
         />
       )}
-      {/* {tracks.length > 0 && (
-        <div>
-          {tracks.map((item) => (
-            <p key={item.track.id}>{item.track.name}</p>
-          ))}
-        </div>
-      )} */}
     </div>
   );
 }
