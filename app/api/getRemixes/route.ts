@@ -37,6 +37,8 @@ export async function POST(req: Request) {
             },
           },
         );
+
+        // TODO: Later add a way to get playlist image
         const data = await response.json();
         // Filter out songs that have the word 'remix' in the title
         const filteredRemixes = data.tracks.items.filter((item: any) =>
