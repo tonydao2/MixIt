@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Button from '../components/Button';
 
 interface Track {
   track: {
@@ -48,6 +49,10 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
     return `${src}?w=${width}&q=${quality || 75}`;
   };
 
+  function addPlaylist() {
+    return false;
+  }
+
   useEffect(() => {
     async function getRemixes() {
       try {
@@ -83,7 +88,7 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
             {tracks.map((track) => (
               <div
                 key={track.track.id}
-                className='flex items-center bg-blue-500 p-4 mb-4 rounded'
+                className='flex items-center bg-blue-500 p-4 mb-4 rounded w-4/5 h-48'
               >
                 <Image
                   loader={myLoader}
@@ -101,7 +106,7 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
             {remixes.map((trackRemix) => (
               <div
                 key={trackRemix.track.id}
-                className='flex items-center bg-blue-500 p-4 mb-4 rounded'
+                className='flex items-center bg-blue-500 p-4 mb-4 rounded w-4/5 h-48'
               >
                 {trackRemix.remixes.length > 0 ? (
                   <select className='ml-4 p-2 rounded'>
@@ -109,6 +114,8 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
                       <option key={remix.id} value={remix.id}>
                         {remix.name}
                       </option>
+                      // TODO: Add plus sign here to add remix to add to list to call add to playlist
+                      // Then change to minus sign to remove from list
                     ))}
                   </select>
                 ) : (
@@ -117,6 +124,7 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
               </div>
             ))}
           </div>
+          {/* <Button onClick={addPlaylist}>Add remixes to playlist</Button> */}
         </>
       )}
     </div>
