@@ -1,35 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button from '../components/Button';
-
-interface Track {
-  track: {
-    id: string;
-    name: string;
-    artists: {
-      name: string;
-    }[];
-    album: {
-      images: {
-        url: string;
-      }[];
-    };
-  };
-}
-
-// This is the interface for the remixes of a track
-interface Remix {
-  id: string;
-  name: string;
-  artists: {
-    name: string;
-  }[];
-  album: {
-    images: {
-      url: string;
-    }[];
-  };
-}
+import { Track, Remix } from '../types/tracks';
 
 // This is the interface for the remixes of a track and the track itself
 interface TrackRemix {
@@ -48,10 +20,6 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
   const myLoader = ({ src, width, quality }: any) => {
     return `${src}?w=${width}&q=${quality || 75}`;
   };
-
-  function addPlaylist() {
-    return false;
-  }
 
   useEffect(() => {
     async function getRemixes() {
