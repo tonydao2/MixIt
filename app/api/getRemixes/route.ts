@@ -19,16 +19,13 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
+
   try {
-    // Promise.all will wait for all the promises to resolve and
-    // for all the data to be fetched before returning the response
     const remixes = await Promise.all(
-      // For each track, fetch the remixes
       tracks.map(async (track: any) => {
-        // const artistName = track.track.artists[0].name;
-        const query = `${track.track.name} remix`;
+        const query = `${track.track.name}`;
         const response = await fetch(
-          `${API_URL}/search?q=${encodeURIComponent(query)}&type=track&limit=5`,
+          `${API_URL}/search?q=${encodeURIComponent(query)}&type=track&limit=20`,
           {
             method: 'GET',
             headers: {
@@ -38,14 +35,15 @@ export async function POST(req: Request) {
           },
         );
 
-        // TODO: Later add a way to get playlist image
         const data = await response.json();
-        // Filter out songs that have the word 'remix' in the title
-        const filteredRemixes = data.tracks.items.filter((item: any) =>
-          item.name.toLowerCase().includes('remix'),
-        );
+        console.log(data);
 
-        // Return the original track and the remixes
+        const filteredRemixes = data.tracks.items.filter((item: any) => {
+          const title = item.name.toLowerCase();
+          const keywords = ['remix', 'rework', 'cover', 'version', 'sped up'];
+          return keywords.some((keyword) => title.includes(keyword));
+        });
+
         return {
           track: track.track, // original track
           remixes: filteredRemixes.map((item: any) => ({
