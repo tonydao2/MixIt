@@ -29,6 +29,8 @@ export default function Home() {
     if (status === 'loading') return; // Do nothing while loading
     if (!session) {
       router.push('/');
+    } else {
+      router
     }
   }, [router, session, status]);
 
