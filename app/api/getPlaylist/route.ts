@@ -1,10 +1,12 @@
-import { API_URL } from "@/app/constants/url";
+import { API_URL } from '@/app/constants/url';
 
 export async function GET(req: Request) {
   const authorization = req.headers.get('authorization');
 
   if (!authorization) {
-    return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+      status: 401,
+    });
   }
 
   const accessToken = authorization.split(' ')[1];
@@ -21,9 +23,13 @@ export async function GET(req: Request) {
     if (response.ok) {
       return new Response(JSON.stringify(data.items), { status: 200 });
     } else {
-      return new Response(JSON.stringify({ error: data }), { status: response.status });
+      return new Response(JSON.stringify({ error: data }), {
+        status: response.status,
+      });
     }
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+      status: 500,
+    });
   }
 }
