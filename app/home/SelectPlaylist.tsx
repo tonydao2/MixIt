@@ -14,23 +14,6 @@ export default function SelectPlaylist({
     return `${src}?w=${width}&q=${quality || 75}`;
   };
 
-  // useEffect(() => {
-  //   async function getTracks() {
-  //     try {
-  //       const data = await fetchTracks(playlist, accessToken);
-
-  //       setTracks(data);
-  //     } catch (error) {
-  //       console.error('Error fetching tracks', error);
-  //     }
-  //   }
-  //   getTracks();
-  // }, [playlist, accessToken]);
-
-  // if (!playlist) {
-  //   return <div>No playlist selected</div>;
-  // }
-
   if (!playlist) {
     return <div>No playlist selected</div>;
   }
@@ -47,13 +30,6 @@ export default function SelectPlaylist({
           height={200}
         />
       )}
-      {/* {tracks.length > 0 && (
-        <div>
-          {tracks.map((item) => (
-            <p key={item.track.id}>{item.track.name}</p>
-          ))}
-        </div>
-      )} */}
     </div>
   );
 }

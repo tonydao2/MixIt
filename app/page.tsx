@@ -4,14 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Button from './components/Button';
+import { useRouter } from 'next/navigation';
 
-type PlaylistItem = {
-  id: string;
-  name: string;
-};
-
-export default function Home() {
+export default function Page() {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push('/home');
+    }
+  }, [session, router]);
 
   return (
     <div className='flex flex-col items-center justify-center h-screen bg-black text-white'>
