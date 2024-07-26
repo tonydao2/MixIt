@@ -36,7 +36,6 @@ export async function POST(req: Request) {
         );
 
         const data = await response.json();
-        console.log(data);
 
         const filteredRemixes = data.tracks.items.filter((item: any) => {
           const title = item.name.toLowerCase();
@@ -50,6 +49,8 @@ export async function POST(req: Request) {
             id: item.id,
             name: item.name,
             artists: item.artists,
+            // add album image
+            album: item.album,
           })),
         };
       }),
