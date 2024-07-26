@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button from '../components/Button';
 import { Track, Remix } from '../types/tracks';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 
 // This is the interface for the remixes of a track and the track itself
 interface TrackRemix {
@@ -51,7 +58,7 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
 
   // TODO: Include the picture of the playlist of the song in response
   const handleChange =
-    (trackId: string) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+    (trackId: string) => (event: SelectChangeEvent<string>) => {
       const remixId = event.target.value;
       const selectedRemix =
         remixes
@@ -96,11 +103,12 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
               ))}
             </div>
             {/* TODO: Use MUI for Select prop component */}
+            {/* TODO: Move this to component too much code */}
             <div className='flex flex-col items-center w-3/5 ml-2'>
               {remixes.map((trackRemix) => (
                 <div
                   key={trackRemix.track.id}
-                  className='flex items-center p-4 mb-4 rounded w-full h-48'
+                  className='flex items-center p-4 mb-4 rounded w-full h-48 '
                 >
                   {trackRemix.remixes.length > 0 ? (
                     <div className='flex flex-row items-center'>
@@ -119,24 +127,76 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
                         )}
                       </div>
                       <div className='ml-4'>
-                        <select
-                          className='p-2 rounded mb-2'
-                          onChange={handleChange(trackRemix.track.id)}
-                          value={selectedRemixes[trackRemix.track.id]?.id || ''}
-                          style={{ width: '100px', height: '40px' }}
+                        <FormControl
+                          variant='standard'
+                          className='ml-4 max-w-96'
                         >
-                          <option value=''>None</option>
-                          {trackRemix.remixes.map((remix) => (
-                            <option key={remix.id} value={remix.id}>
-                              {remix.name}
-                            </option>
-                          ))}
-                        </select>
+                          <InputLabel
+                            id={`select-remix-label-${trackRemix.track.id}`}
+                            sx={{
+                              color: 'white',
+                              marginBottom: '0.5rem',
+                            }}
+                            className=''
+                          >
+                            Select Remix
+                          </InputLabel>
+                          <Select
+                            labelId={`select-remix-label-${trackRemix.track.id}`}
+                            id={`select-remix-${trackRemix.track.id}`}
+                            value={
+                              selectedRemixes[trackRemix.track.id]?.id || ''
+                            }
+                            onChange={handleChange(trackRemix.track.id)}
+                            label='Select Remix'
+                            sx={{
+                              color: 'white',
+                              '.MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'white',
+                              },
+                              '&.Mui-focused .MuiOutlinedInput-notchedOutline':
+                                {
+                                  borderColor: 'white',
+                                },
+                              '.MuiSvgIcon-root ': {
+                                fill: 'white !important',
+                              },
+                              '.MuiSelect-select': {
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: 'flex',
+                                alignItems: 'center',
+                                fontStyle: 'italic',
+                              },
+                            }}
+                          >
+                            <MenuItem value=''>
+                              <em>None</em>
+                            </MenuItem>
+                            {trackRemix.remixes.map((remix) => (
+                              <MenuItem
+                                key={remix.id}
+                                value={remix.id}
+                                style={{
+                                  maxWidth: '300px',
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                }}
+                              >
+                                <div className='flex items-center justify-between'>
+                                  {remix.name}
+                                </div>
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                         {selectedRemixes[trackRemix.track.id] && (
-                          <div className='text-white text-left max-w-xs'>
-                            <h5 className='font-semibold text-lg truncate'>
+                          <div className='text-white text-left max-w-xs truncate'>
+                            {/* <h5 className='font-semibold text-lg truncate'>
                               {selectedRemixes[trackRemix.track.id]?.name}
-                            </h5>
+                            </h5> */}
                             <h5 className='text-gray-400 text-sm font-medium italic truncate'>
                               {selectedRemixes[trackRemix.track.id]?.artists
                                 .map((artist) => artist.name)
