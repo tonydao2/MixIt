@@ -16,6 +16,9 @@ interface TracksRemixProps {
 
 export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
   const [remixes, setRemixes] = useState<TrackRemix[]>([]);
+  const [selectedRemixes, setSelectedRemixes] = useState<{
+    [key: string]: Remix | null;
+  }>({});
 
   const myLoader = ({ src, width, quality }: any) => {
     return `${src}?w=${width}&q=${quality || 75}`;
@@ -47,6 +50,19 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
   }, [tracks, accessToken]);
 
   // TODO: Include the picture of the playlist of the song in response
+  const handleChange =
+    (trackId: string) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const remixId = event.target.value;
+      const selectedRemix =
+        remixes
+          .find((trackRemix) => trackRemix.track.id === trackId)
+          ?.remixes.find((remix) => remix.id === remixId) || null;
+
+      setSelectedRemixes((prev) => ({
+        ...prev,
+        [trackId]: selectedRemix,
+      }));
+    };
 
   return (
     <div className='flex flex-col justify-center w-full p-10'>
@@ -57,7 +73,7 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
               {tracks.map((track) => (
                 <div
                   key={track.track.id}
-                  className='flex items-center bg-blue-500 p-4 mb-4 rounded flex-grow'
+                  className='flex items-center p-4 mb-4 rounded flex-grow'
                 >
                   <Image
                     loader={myLoader}
@@ -66,13 +82,15 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
                     width={150}
                     height={150}
                   />
-                  <div className='ml-10 text-white text-left'>
-                    <p>{track.track.name}</p>
-                    <p>
+                  <div className='ml-8 text-white text-left'>
+                    <h5 className='font-semibold text-lg  '>
+                      {track.track.name}
+                    </h5>
+                    <h5 className='text-gray text-sm font-medium italic'>
                       {track.track.artists
                         .map((artist) => artist.name)
                         .join(', ')}
-                    </p>
+                    </h5>
                   </div>
                 </div>
               ))}
@@ -82,18 +100,52 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
               {remixes.map((trackRemix) => (
                 <div
                   key={trackRemix.track.id}
-                  className='flex items-center bg-blue-500 p-4 mb-4 rounded w-full h-48'
+                  className='flex items-center p-4 mb-4 rounded w-full h-48'
                 >
                   {trackRemix.remixes.length > 0 ? (
-                    <select className='ml-4 p-2 rounded'>
-                      {trackRemix.remixes.map((remix) => (
-                        <option key={remix.id} value={remix.id}>
-                          {remix.name}
-                        </option>
-                        // TODO: Add plus sign here to add remix to add to list to call add to playlist
-                        // Then change to minus sign to remove from list
-                      ))}
-                    </select>
+                    <div className='flex flex-row items-center'>
+                      <div className='flex-shrink-0'>
+                        {selectedRemixes[trackRemix.track.id] && (
+                          <Image
+                            loader={myLoader}
+                            src={
+                              selectedRemixes[trackRemix.track.id]?.album
+                                .images[0].url || ''
+                            }
+                            alt={trackRemix.track.name}
+                            width={150}
+                            height={150}
+                          />
+                        )}
+                      </div>
+                      <div className='ml-4'>
+                        <select
+                          className='p-2 rounded mb-2'
+                          onChange={handleChange(trackRemix.track.id)}
+                          value={selectedRemixes[trackRemix.track.id]?.id || ''}
+                          style={{ width: '100px', height: '40px' }}
+                        >
+                          <option value=''>None</option>
+                          {trackRemix.remixes.map((remix) => (
+                            <option key={remix.id} value={remix.id}>
+                              {remix.name}
+                            </option>
+                          ))}
+                        </select>
+                        {selectedRemixes[trackRemix.track.id] && (
+                          <div className='text-white text-left max-w-xs'>
+                            <h5 className='font-semibold text-lg truncate'>
+                              {selectedRemixes[trackRemix.track.id]?.name}
+                            </h5>
+                            <h5 className='text-gray-400 text-sm font-medium italic truncate'>
+                              {selectedRemixes[trackRemix.track.id]?.artists
+                                .map((artist) => artist.name)
+                                .join(', ')}
+                            </h5>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   ) : (
                     <p className='text-white ml-4'>
                       No alternate versions found
