@@ -9,6 +9,7 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import Image from 'next/image';
+import Button from './Button';
 
 interface RemixProps {
   trackRemix: {
@@ -19,19 +20,34 @@ interface RemixProps {
 }
 
 export default function Remix({ trackRemix, accessToken }: RemixProps) {
-  // const [selectedRemix, setSelectedRemix] = useState<RemixTracks | null>(null);
-  const [selectedRemixes, setSelectedRemixes] = useState<{
-    [key: string]: RemixTracks | null;
-  }>({});
+  const [selectedRemix, setSelectedRemix] = useState<RemixTracks | null>(null);
 
-  const handleChange = (trackId: string) => (event: SelectChangeEvent<string>) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     const remixId = event.target.value;
-    const selectedRemix = trackRemix.remixes.find((remix) => remix.id === remixId) || null;
-    setSelectedRemixes((prev) => ({
-      ...prev,
-      [trackId]: selectedRemix,
-    }));
+    const selected =
+      trackRemix.remixes.find((remix) => remix.id === remixId) || null;
+    setSelectedRemix(selected);
   };
+
+  async function handleAddToPlaylist() {
+    console.log('Adding to playlist', selectedRemix);
+    try {
+      const response = await fetch('/api/addToPlaylist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          track: selectedRemix,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error adding to playlist', error);
+    }
+  }
 
   return (
     <div
@@ -117,6 +133,8 @@ export default function Remix({ trackRemix, accessToken }: RemixProps) {
                     .map((artist) => artist.name)
                     .join(', ')}
                 </h5>
+
+                <Button onClick={handleAddToPlaylist}>Add to Playlist</Button>
               </div>
             )}
           </div>
