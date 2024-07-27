@@ -15,16 +15,22 @@ interface RemixProps {
     track: Track['track'];
     remixes: RemixTracks[];
   };
+  accessToken: string | undefined;
 }
 
-export default function Remix({ trackRemix }: RemixProps) {
-  const [selectedRemix, setSelectedRemix] = useState<RemixTracks | null>(null);
+export default function Remix({ trackRemix, accessToken }: RemixProps) {
+  // const [selectedRemix, setSelectedRemix] = useState<RemixTracks | null>(null);
+  const [selectedRemixes, setSelectedRemixes] = useState<{
+    [key: string]: RemixTracks | null;
+  }>({});
 
-  const handleChange = (event: SelectChangeEvent<string>) => {
+  const handleChange = (trackId: string) => (event: SelectChangeEvent<string>) => {
     const remixId = event.target.value;
-    const selected =
-      trackRemix.remixes.find((remix) => remix.id === remixId) || null;
-    setSelectedRemix(selected);
+    const selectedRemix = trackRemix.remixes.find((remix) => remix.id === remixId) || null;
+    setSelectedRemixes((prev) => ({
+      ...prev,
+      [trackId]: selectedRemix,
+    }));
   };
 
   return (

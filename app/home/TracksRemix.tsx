@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { myLoader } from '../utils/loader';
 import Remix from '../components/Remix';
+import Tracks from '../components/Tracks';
 
 // This is the interface for the remixes of a track and the track itself
 interface TrackRemix {
@@ -74,30 +75,7 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
         <>
           <div className='flex flex-row justify-between'>
             <div className='flex flex-col w-3/5 mr-2'>
-              {tracks.map((track) => (
-                <div
-                  key={track.track.id}
-                  className='flex items-center p-4 mb-4 rounded flex-grow'
-                >
-                  <Image
-                    loader={myLoader}
-                    src={track.track.album.images[0].url}
-                    alt={track.track.name}
-                    width={150}
-                    height={150}
-                  />
-                  <div className='ml-8 text-white text-left'>
-                    <h5 className='font-semibold text-lg  '>
-                      {track.track.name}
-                    </h5>
-                    <h5 className='text-gray text-sm font-medium italic'>
-                      {track.track.artists
-                        .map((artist) => artist.name)
-                        .join(', ')}
-                    </h5>
-                  </div>
-                </div>
-              ))}
+              <Tracks tracks={tracks} />
             </div>
             {/* TODO: Use MUI for Select prop component */}
             {/* TODO: Move this to component too much code */}
