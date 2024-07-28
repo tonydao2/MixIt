@@ -60,20 +60,6 @@ export default function TracksRemix({
     }
   }, [tracks, accessToken, playlistId]);
 
-  const handleChange =
-    (trackId: string) => (event: SelectChangeEvent<string>) => {
-      const remixId = event.target.value;
-      const selectedRemix =
-        remixes
-          .find((trackRemix) => trackRemix.track.id === trackId)
-          ?.remixes.find((remix) => remix.id === remixId) || null;
-
-      setSelectedRemixes((prev) => ({
-        ...prev,
-        [trackId]: selectedRemix,
-      }));
-    };
-
   return (
     <div className='flex flex-col justify-center w-full p-10'>
       {tracks.length > 0 && (
@@ -85,14 +71,12 @@ export default function TracksRemix({
             {/* TODO: Use MUI for Select prop component */}
             {/* TODO: Move this to component too much code */}
             <div className='flex flex-col items-center w-3/5 ml-2'>
-              {remixes.map((trackRemix) => (
-                <Remix
-                  key={trackRemix.track.id}
-                  trackRemix={trackRemix}
-                  playlistId={playlistId}
-                  accessToken={accessToken}
-                />
-              ))}
+              <Remix
+                trackRemix={flatRemixes}
+                tracks={tracks}
+                playlistId={playlistId}
+                accessToken={accessToken}
+              />
             </div>
           </div>
         </>
