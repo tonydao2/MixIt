@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Track, RemixTracks } from '../types/tracks';
 import { myLoader } from '../utils/loader';
 import {
@@ -17,20 +17,54 @@ interface RemixProps {
     remixes: RemixTracks[];
   };
   accessToken: string | undefined;
+  playlistId: string | undefined;
 }
 
-export default function Remix({ trackRemix, accessToken }: RemixProps) {
+export default function Remix({
+  trackRemix,
+  accessToken,
+  playlistId,
+}: RemixProps) {
   const [selectedRemix, setSelectedRemix] = useState<RemixTracks | null>(null);
+  const [isInPlaylist, setIsInPlaylist] = useState(false);
 
-  const handleChange = (event: SelectChangeEvent<string>) => {
+  // Check if the selected remix is already in the playlist
+  console.log(setSelectedRemix);
+
+  const handleChange = async (event: SelectChangeEvent<string>) => {
     const remixId = event.target.value;
     const selected =
       trackRemix.remixes.find((remix) => remix.id === remixId) || null;
     setSelectedRemix(selected);
+
+    if (selected && accessToken && playlistId) {
+      try {
+        const response = await fetch(`/api/getTracks`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ playlistId: playlistId }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch playlist tracks');
+        }
+
+        const data = await response.json();
+        const currentTrackUris = data.items.map((item: any) => item.track.uri);
+
+        setIsInPlaylist(currentTrackUris.includes(selected.uri));
+      } catch (error) {
+        console.error('Error checking playlist tracks', error);
+      }
+    }
   };
 
-  async function handleAddToPlaylist() {
-    console.log('Adding to playlist', selectedRemix);
+  async function addToPlaylist() {
+    console.log('Adding to playlist', selectedRemix?.uri);
+    console.log('Playlist ID', playlistId);
     try {
       const response = await fetch('/api/addToPlaylist', {
         method: 'POST',
@@ -39,11 +73,30 @@ export default function Remix({ trackRemix, accessToken }: RemixProps) {
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          track: selectedRemix,
+          track: selectedRemix?.uri,
+          playlist_id: playlistId,
         }),
       });
       const data = await response.json();
-      console.log(data);
+    } catch (error) {
+      console.error('Error adding to playlist', error);
+    }
+  }
+
+  async function removeFromPlaylist() {
+    try {
+      const response = await fetch('/api/removeFromPlaylist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          track: selectedRemix?.uri,
+          playlist_id: playlistId,
+        }),
+      });
+      const data = await response.json();
     } catch (error) {
       console.error('Error adding to playlist', error);
     }
@@ -133,8 +186,14 @@ export default function Remix({ trackRemix, accessToken }: RemixProps) {
                     .map((artist) => artist.name)
                     .join(', ')}
                 </h5>
-
-                <Button onClick={handleAddToPlaylist}>Add to Playlist</Button>
+                {/* If song is in playlist change button to remove else add */}
+                {isInPlaylist ? (
+                  <Button onClick={removeFromPlaylist}>
+                    Remove from Playlist
+                  </Button>
+                ) : (
+                  <Button onClick={addToPlaylist}>Add to Playlist</Button>
+                )}
               </div>
             )}
           </div>
