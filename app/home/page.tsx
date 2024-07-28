@@ -23,14 +23,13 @@ export default function Home() {
     null,
   );
   const [tracks, setTracks] = useState<any[]>([]);
-  //  TODO - use selectedPlaylist to get tracks on the playlist
 
   useEffect(() => {
     if (status === 'loading') return; // Do nothing while loading
     if (!session) {
       router.push('/');
     } else {
-      router
+      router;
     }
   }, [router, session, status]);
 
@@ -69,15 +68,18 @@ export default function Home() {
     const playlist = playlists.find((p) => p.id === selectedId) || null;
     setSelectedPlaylist(playlist);
 
+    console.log('selectedPlaylist', selectedPlaylist?.id);
+
     if (playlist && session?.accessToken) {
+      console.log('getting tracks');
       try {
         const response = await fetch('/api/getTracks', {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${session.accessToken}`,
-            Playlist: playlist.id,
           },
+          body: JSON.stringify({ playlistId: playlist.id }),
         });
         const data = await response.json();
         setTracks(data);
@@ -118,7 +120,11 @@ export default function Home() {
         accessToken={session?.accessToken}
         tracks={tracks}
       />
-      <TracksRemix tracks={tracks} accessToken={session?.accessToken} />
+      <TracksRemix
+        tracks={tracks}
+        accessToken={session?.accessToken}
+        playlistId={selectedPlaylist?.id}
+      />
     </div>
   );
 }

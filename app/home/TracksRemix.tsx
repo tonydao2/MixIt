@@ -22,9 +22,14 @@ interface TrackRemix {
 interface TracksRemixProps {
   tracks: Track[];
   accessToken: string | undefined;
+  playlistId: string | undefined;
 }
 
-export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
+export default function TracksRemix({
+  tracks,
+  accessToken,
+  playlistId,
+}: TracksRemixProps) {
   const [remixes, setRemixes] = useState<TrackRemix[]>([]);
   const [selectedRemixes, setSelectedRemixes] = useState<{
     [key: string]: RemixTracks | null;
@@ -53,7 +58,7 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
     if (accessToken && tracks.length > 0) {
       getRemixes();
     }
-  }, [tracks, accessToken]);
+  }, [tracks, accessToken, playlistId]);
 
   const handleChange =
     (trackId: string) => (event: SelectChangeEvent<string>) => {
@@ -81,7 +86,12 @@ export default function TracksRemix({ tracks, accessToken }: TracksRemixProps) {
             {/* TODO: Move this to component too much code */}
             <div className='flex flex-col items-center w-3/5 ml-2'>
               {remixes.map((trackRemix) => (
-                <Remix key={trackRemix.track.id} trackRemix={trackRemix} />
+                <Remix
+                  key={trackRemix.track.id}
+                  trackRemix={trackRemix}
+                  playlistId={playlistId}
+                  accessToken={accessToken}
+                />
               ))}
             </div>
           </div>

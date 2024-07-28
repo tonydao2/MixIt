@@ -51,6 +51,7 @@ export async function POST(req: Request) {
             artists: item.artists,
             // add album image
             album: item.album,
+            uri: item.uri,
           })),
         };
       }),
