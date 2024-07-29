@@ -71,12 +71,15 @@ export default function TracksRemix({
             {/* TODO: Use MUI for Select prop component */}
             {/* TODO: Move this to component too much code */}
             <div className='flex flex-col items-center w-3/5 ml-2'>
-              <Remix
-                trackRemix={flatRemixes}
-                tracks={tracks}
-                playlistId={playlistId}
-                accessToken={accessToken}
-              />
+              {remixes.map((trackRemix) => (
+                <Remix
+                  key={trackRemix.track.id}
+                  trackRemix={trackRemix}
+                  tracks={tracks}
+                  playlistId={playlistId}
+                  accessToken={accessToken}
+                />
+              ))}
             </div>
           </div>
         </>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { Track } from '../types/tracks';
 import Image from 'next/image';
 import { myLoader } from '../utils/loader';
@@ -8,6 +8,10 @@ interface TracksProps {
 }
 
 export default function Tracks({ tracks }: TracksProps) {
+  useEffect(() => {
+    console.log(tracks);
+  }, [tracks]);
+
   return (
     <div>
       {tracks.map((track) => (
