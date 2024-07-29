@@ -61,6 +61,12 @@ export default function Home() {
     }
   }, [session]);
 
+  const handleRemoveTrack = (removedTrackUri: string) => {
+    setTracks((prevTracks) =>
+      prevTracks.filter((track) => track.uri !== removedTrackUri),
+    );
+  };
+
   const handleSelectChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
