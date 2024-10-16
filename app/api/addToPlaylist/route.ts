@@ -1,13 +1,8 @@
 import { API_URL } from '@/app/constants/url';
 
 export async function POST(req: Request) {
-  const { playlistId } = await req.json();
-  console.log('playlistId', playlistId);
   const authorization = req.headers.get('authorization');
-
-  if (!playlistId) {
-    return Response.json({ error: 'No playlist with ID' }, { status: 401 });
-  }
+  const { track, playlist_id } = await req.json();
 
   if (!authorization) {
     return Response.json({ error: 'Not authenticated' }, { status: 401 });
@@ -15,16 +10,27 @@ export async function POST(req: Request) {
 
   const accessToken = authorization.split(' ')[1];
 
+  // Need to get playlist id from the user
   try {
-    const response = await fetch(`${API_URL}/playlists/${playlistId}/tracks`, {
+    console.log('Adding to playlist', track);
+    console.log('Playlist ID', playlist_id);
+
+    const response = await fetch(`${API_URL}/playlists/${playlist_id}/tracks`, {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
+      body: JSON.stringify({
+        uris: [track],
+      }),
     });
+
     const data = await response.json();
+    console.log(data);
 
     if (response.ok) {
-      return new Response(JSON.stringify(data.items), { status: 200 });
+      return new Response(JSON.stringify(data), { status: 200 });
     } else {
       return new Response(JSON.stringify({ error: data }), {
         status: response.status,
