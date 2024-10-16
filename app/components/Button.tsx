@@ -9,7 +9,7 @@ export default function Button({ onClick, children }: ButtonProps) {
   return (
     <button
       onClick={onClick}
-      className='px-6 py-3 bg-white text-black font-bold text-lg rounded-full hover:bg-green-500 hover:text-white transition-colors duration-200'
+      className='mt-6 px-6 py-3 bg-white text-black font-bold text-lg rounded-full hover:bg-green-500 hover:text-white transition-colors duration-200'
     >
       {children}
     </button>

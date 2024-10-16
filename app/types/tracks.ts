@@ -1,4 +1,4 @@
-export interface Remix {
+export interface RemixTracks {
   id: string;
   name: string;
   artists: {
