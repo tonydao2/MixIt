@@ -7,14 +7,14 @@ import Button from './components/Button';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (session) {
+    if (status == 'authenticated') {
       router.push('/home');
     }
-  }, [session, router]);
+  }, [status, router]);
 
   return (
     <div className='flex flex-col items-center justify-center h-screen bg-black text-white'>
