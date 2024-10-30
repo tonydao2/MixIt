@@ -108,7 +108,7 @@ export default function Remix({
   return (
     <div
       key={trackRemix.track.id}
-      className='flex items-center p-4 mb-4 rounded w-full h-48 '
+      className='flex items-center p-4 mb-4 rounded w-full h-48 flex-grow'
     >
       {trackRemix.remixes.length > 0 ? (
         <div className='flex flex-row items-center'>
@@ -125,15 +125,12 @@ export default function Remix({
           </div>
           <div className='ml-4'>
             <FormControl variant='standard' className='ml-4 max-w-96'>
-              <InputLabel
-                id={`select-remix-label-${trackRemix.track.id}`}
-                sx={{
-                  color: 'white',
-                  marginBottom: '0.5rem',
-                }}
+              <label
+                htmlFor={`select-remix-${trackRemix.track.id}`}
+                className='block text-white mb-2 text-sm font-medium'
               >
                 Select Remix
-              </InputLabel>
+              </label>
               <Select
                 labelId={`select-remix-label-${trackRemix.track.id}`}
                 id={`select-remix-${trackRemix.track.id}`}
@@ -159,6 +156,7 @@ export default function Remix({
                     alignItems: 'center',
                     fontStyle: 'italic',
                   },
+                  width: '300px',
                 }}
               >
                 <MenuItem value=''>
