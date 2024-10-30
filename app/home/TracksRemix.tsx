@@ -63,26 +63,22 @@ export default function TracksRemix({
   return (
     <div className='flex flex-col justify-center w-full p-10'>
       {tracks.length > 0 && (
-        <>
-          <div className='flex flex-row justify-between'>
-            <div className='flex flex-col w-3/5 mr-2'>
-              <Tracks tracks={tracks} />
-            </div>
-            {/* TODO: Use MUI for Select prop component */}
-            {/* TODO: Move this to component too much code */}
-            <div className='flex flex-col items-center w-3/5 ml-2'>
-              {remixes.map((trackRemix) => (
-                <Remix
-                  key={trackRemix.track.id}
-                  trackRemix={trackRemix}
-                  tracks={tracks}
-                  playlistId={playlistId}
-                  accessToken={accessToken}
-                />
-              ))}
-            </div>
+        <div className='flex flex-col md:flex-row justify-between'>
+          <div className='flex flex-col w-full md:w-3/5 mr-2'>
+            <Tracks tracks={tracks} />
           </div>
-        </>
+          <div className='flex flex-col items-center w-full md:w-3/5 ml-2'>
+            {remixes.map((trackRemix) => (
+              <Remix
+                key={trackRemix.track.id}
+                trackRemix={trackRemix}
+                tracks={tracks}
+                playlistId={playlistId}
+                accessToken={accessToken}
+              />
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

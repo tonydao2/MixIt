@@ -13,7 +13,7 @@ export default function Tracks({ tracks }: TracksProps) {
   }, [tracks]);
 
   return (
-    <div>
+    <div className='flex flex-col flex-grow'>
       {tracks.map((track) => (
         <div
           key={track.track.id}
