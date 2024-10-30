@@ -5,14 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import SelectPlaylist from './SelectPlaylist';
 import TracksRemix from './TracksRemix';
 import { useRouter } from 'next/navigation';
-
-interface PlaylistItem {
-  id: string;
-  name: string;
-  images: {
-    url: string;
-  }[];
-}
+import { PlaylistItem } from '../types/playlist';
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -33,8 +26,10 @@ export default function Home() {
     }
   }, [router, session, status]);
 
+  // Fetch the playlist data if the session exists
   useEffect(() => {
     async function fetchPlaylist() {
+      // Fetch all user playlists
       if (session?.accessToken) {
         try {
           const response = await fetch('/api/getPlaylist', {
@@ -61,12 +56,7 @@ export default function Home() {
     }
   }, [session]);
 
-  const handleRemoveTrack = (removedTrackUri: string) => {
-    setTracks((prevTracks) =>
-      prevTracks.filter((track) => track.uri !== removedTrackUri),
-    );
-  };
-
+  // Function to handle the change of the selected playlist
   const handleSelectChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
@@ -80,6 +70,8 @@ export default function Home() {
       console.log('getting tracks');
       try {
         const response = await fetch('/api/getTracks', {
+          // POST request to get tracks to pass in the playlist ID
+          // Could also pass with /api/getTracks/[playlistId]
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -102,8 +94,7 @@ export default function Home() {
   return (
     <div className='flex flex-col items-center justify-center text-white space-y-3'>
       <nav className='flex flex-col items-center justify-center space-y-2'>
-        <h1>Home</h1>
-        {session && (
+        {session && ( // If session exists, show sign out button
           <button onClick={() => signOut({ callbackUrl: '/' })}>
             Sign out
           </button>
@@ -126,6 +117,7 @@ export default function Home() {
         accessToken={session?.accessToken}
         tracks={tracks}
       />
+      {/* Shows all Tracks and possible Remix */}
       <TracksRemix
         tracks={tracks}
         accessToken={session?.accessToken}
