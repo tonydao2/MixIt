@@ -1,4 +1,4 @@
-# SpotiMix
+# MixIt
 An application that allows for users to find their remixes of their favorite songs and be able to add them to their playlist.
 
 ![SpotiMix Image](https://i.imgur.com/hWxQ6em.png)
